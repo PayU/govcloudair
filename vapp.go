@@ -922,6 +922,50 @@ func (v *VApp) SetOvf(parameters map[string]string) (Task, error) {
 
 }
 
+
+func (v *VApp) ChangeVAppName(name string) (Task, error) {
+	err := v.Refresh()
+	if err != nil {
+		return Task{}, fmt.Errorf("error refreshing vapp before running customization: %v", err)
+	}
+
+	newname := &types.VApp{
+		Name:  name,
+		Xmlns: "http://www.vmware.com/vcloud/v1.5",
+	}
+
+	output, err := xml.MarshalIndent(newname, "  ", "    ")
+	if err != nil {
+		fmt.Printf("error: %v\n", err)
+	}
+
+	log.Printf("[DEBUG] VCD Client configuration: %s", output)
+
+	b := bytes.NewBufferString(xml.Header + string(output))
+
+	s, _ := url.ParseRequestURI(v.VApp.HREF)
+
+	req := v.c.NewRequest(map[string]string{}, "PUT", *s, b)
+
+	req.Header.Add("Content-Type", "application/vnd.vmware.vcloud.vApp+xml")
+
+	resp, err := checkResp(v.c.Http.Do(req))
+	if err != nil {
+		return Task{}, fmt.Errorf("error customizing VApp: %s", err)
+	}
+
+	task := NewTask(v.c)
+
+	if err = decodeBody(resp, task.Task); err != nil {
+		return Task{}, fmt.Errorf("error decoding Task response: %s", err)
+	}
+
+	// The request was successful
+	return *task, nil
+
+}
+
+
 func (v *VApp) ChangeNetworkConfig(network, ip string) (Task, error) {
 	err := v.Refresh()
 	if err != nil {

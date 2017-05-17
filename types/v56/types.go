@@ -769,6 +769,7 @@ type VMGeneralParams struct {
 type VApp struct {
 	// Attributes
 	HREF                  string `xml:"href,attr,omitempty"`                  // The URI of the entity.
+	Xmlns                 string `xml:"xmlns,attr,omitempty"`                 // Namespace used by XML marshaler
 	Type                  string `xml:"type,attr,omitempty"`                  // The MIME type of the entity.
 	ID                    string `xml:"id,attr,omitempty"`                    // The entity identifier, expressed in URN format. The value of this attribute uniquely identifies the entity, persists for the life of the entity, and is never reused.
 	OperationKey          string `xml:"operationKey,attr,omitempty"`          // Optional unique identifier to support idempotent semantics for create and delete operations.
