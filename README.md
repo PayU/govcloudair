@@ -1,4 +1,4 @@
-# govcloudair 
+# govcloudair
 This repo provides the `govcloudair` package which offers an interface to the vCloud Air 5.6 and 5.7 API and vCloud Director 5.5 API.
 
 It serves as a foundation for a project currently in development, there are plans to make it a general purpose API in the future. The `govcloudair` package is used by the Terraform provider for vCloud Director.
@@ -6,6 +6,11 @@ It serves as a foundation for a project currently in development, there are plan
 The API is currently under heavy development, its coverage is extremely limited at the moment.
 
 The bindings now support both Subscription and On-demand accounts and vCloud Director 5.5
+
+Project is forked from github.com/PayU/govcloudair and enables a couple of use-cases that
+fill our needs: some management of vapps, e.g. creation of empty vapp, rename VApp, associate
+VM to particular network, compose VM into VApp, manage block storages. As opposed to the
+original client, many of these operations make Terraform more user-friendly.
 
 ### Example ###
 
@@ -62,4 +67,3 @@ func main() {
   fmt.Printf("Org URL: %s\n", client.OrgHREF.String())
 }
 ```
-
